@@ -50,6 +50,7 @@ const OfferStudent = () => {
 
   return (
     <div style={{ marginBlock: "20px" }}>
+      <h1 style={{textAlign: 'center'}}>Mis postulaciones</h1>
       <Button to="/student-offer-history">
         Historial
       </Button>
