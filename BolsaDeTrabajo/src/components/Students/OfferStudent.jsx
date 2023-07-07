@@ -45,6 +45,9 @@ const OfferStudent = () => {
 
   return (
     <div style={{ marginBlock: "20px" }}>
+      <Button to="/student-offer-history">
+        Historial
+      </Button>
       {offers.length === 0 ? (
           <h2>No estás registrado en ninguna oferta. Si querés buscar ofertas, accedé a la pestaña "Últimos empleos" o...
             <Link to="/Offers" className="highlight-link">
