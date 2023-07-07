@@ -1,12 +1,12 @@
 import React, { useEffect, useState, useContext } from "react";
 import { UserContext } from "../../context/UserContext";
-import { getStudentOffers, deleteStudentToOffer } from "../../api";
+import { getStudentOffers, deleteStudentFromOffer } from "../../api";
 import { format } from "date-fns";
 import { Card, Button, Alert, Spinner } from "react-bootstrap";
 import { Link } from "react-router-dom"
 const OfferStudent = () => {
   const { user } = useContext(UserContext);
-  const [offers, setOffers] = useState([]);
+  const [studentOffers, setStudentOffers] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
@@ -15,7 +15,7 @@ const OfferStudent = () => {
   useEffect(() => {
     getStudentOffers(user.userId, user.token)
       .then((data) => {
-        setOffers(data);
+        setStudentOffers(data);
       })
       .catch((error) => {
         setError(error.message);
@@ -27,17 +27,17 @@ const OfferStudent = () => {
   }, []);
 
   const handleRemoveStudentFromOffer = (offerId) => {
-    deleteStudentToOffer(user.token, user.userId, offerId)
+    deleteStudentFromOffer(user.token, user.userId, offerId)
       .then(() => {
         setSuccess("Fuiste eliminado de la oferta correctamente.");
         setError("");
         setOfferId(offerId);
 
         setTimeout(() => {
-          const updatedOffers = offers.filter(
+          const updatedOffers = studentOffers.filter(
             (offer) => offer.offerId !== offerId
           );
-          setOffers(updatedOffers);
+          setStudentOffers(updatedOffers);
         }, 2000);
       })
       .catch((error) => {
@@ -59,39 +59,43 @@ const OfferStudent = () => {
         </div>
       ) : (
         <>
-          {offers.length === 0 ? (
+          {studentOffers.length === 0 ? (
           <h2>No estás registrado en ninguna oferta. Si querés buscar ofertas, accedé a la pestaña "Últimos empleos" o...
             <Link to="/Offers" className="highlight-link">
               <Button>Hacé click acá</Button>
             </Link>
           </h2>
           ) : (
-            offers.map((offer, index) => (
+            studentOffers.map((studentOffer, index) => (
               <Card
-                key={offer.offerId}
+                key={studentOffer.offer.offerId}
                 className={index % 2 === 0 ? "even-card" : "odd-card"}
               >
                 <Card.Body>
-                  <Card.Title>{offer.company.companyName}</Card.Title>
-                  <Card.Title>Busca {offer.offerTitle}</Card.Title>
+                  <Card.Title>{studentOffer.offer.company.companyName}</Card.Title>
+                  <Card.Title>Busca {studentOffer.offer.offerTitle}</Card.Title>
                   <Card.Subtitle className="mb-2 text-muted">
-                    Con conocimiento excluyente en: {offer.offerSpecialty}
+                    Con conocimiento excluyente en: {studentOffer.offer.offerSpecialty}
                   </Card.Subtitle>
-                  <Card.Text>{offer.offerDescription}</Card.Text>
+                  <Card.Text>{studentOffer.offer.offerDescription}</Card.Text>
                   <Card.Text>
-                    Fecha de publicación{" "}
-                    {format(new Date(offer.createdDate), "dd/MM/yyyy")}
+                    Fecha de publicación:{" "}
+                    {format(new Date(studentOffer.offer.createdDate), "dd/MM/yyyy")}
                   </Card.Text>
-                  <Card.Text>Rubro: {offer.company.companyLine}</Card.Text>
-                  <Card.Text>Ciudad: {offer.company.companyLocation}</Card.Text>
+                  <Card.Text>Rubro: {studentOffer.offer.company.companyLine}</Card.Text>
+                  <Card.Text>Ciudad: {studentOffer.offer.company.companyLocation}</Card.Text>
+                  <Card.Text>
+                    Fecha de postulación:{" "}
+                    {format(new Date(studentOffer.applicationDate), "dd/MM/yyyy")}
+                  </Card.Text>
                   <Button
-                    onClick={() => handleRemoveStudentFromOffer(offer.offerId)}
+                    onClick={() => handleRemoveStudentFromOffer(studentOffer.offer.offerId)}
                     variant="danger"
                   >
                     Eliminar postulación
                   </Button>
                 </Card.Body>
-                {success && offer.offerId === offerId && (
+                {success && studentOffer.offer.offerId === offerId && (
                   <Alert
                     variant="success"
                     dismissible
@@ -100,7 +104,7 @@ const OfferStudent = () => {
                     {success}
                   </Alert>
                 )}
-                {error && offer.offerId === offerId && (
+                {error && studentOffer.offer.offerId === offerId && (
                   <Alert variant="danger" dismissible onClose={() => setError("")}>
                     {error}
                   </Alert>

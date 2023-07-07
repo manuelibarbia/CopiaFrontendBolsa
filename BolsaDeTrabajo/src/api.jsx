@@ -519,7 +519,7 @@ export async function addStudentToOffer(token, studentId, offerId) {
   }
 }
 
-export async function deleteStudentToOffer(token, studentId, offerId) {
+export async function deleteStudentFromOffer(token, studentId, offerId) {
   try {
     const response = await fetch(
       `${DB_DOMAIN}/Student/${offerId}/DeleteStudent/${studentId}`,
