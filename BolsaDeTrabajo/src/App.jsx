@@ -13,7 +13,6 @@ import { UserProvider } from "./context/UserContext";
 import CreateOffer from "./components/Companies/CreateOffer";
 import Offers from "./components/Offers/Offers";
 import AddressForm from "./components/Students/AddressForm";
-import NavStudent from "./components/Students/NavStudent";
 import CreateCareer from "./components/Admin/CreateCareer";
 import SignIn from "./components/SignIn/SignIn";
 import CompanyInfoForm from "./components/Companies/CompanyInfoForm";
@@ -56,7 +55,6 @@ function App() {
                 <Route path="/createOffer" element={<CreateOffer />} />
                 <Route path="/Offers" element={<Offers />}></Route>
 
-                <Route path="/navStudent" element={<NavStudent />}></Route>
                 <Route path="/addressStudent" element={<AddressForm />} />
                 <Route
                   path="/universityStudent"
