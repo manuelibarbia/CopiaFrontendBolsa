@@ -3,7 +3,7 @@ import { UserContext } from "../../context/UserContext";
 import { getStudentOffers, deleteStudentFromOffer } from "../../api";
 import { format } from "date-fns";
 import { Card, Button, Alert, Spinner } from "react-bootstrap";
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 const OfferStudent = () => {
   const { user } = useContext(UserContext);
   const [studentOffers, setStudentOffers] = useState([]);
@@ -11,6 +11,8 @@ const OfferStudent = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [offerId, setOfferId] = useState(null);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     getStudentOffers(user.userId, user.token)
@@ -48,12 +50,18 @@ const OfferStudent = () => {
       });
   };
 
+  const navigateToStudentOfferHistory = () => {
+    navigate("/student-offer-history");
+  }
+
   return (
     <div style={{ marginBlock: "20px" }}>
       <h1 style={{textAlign: 'center'}}>Mis postulaciones</h1>
-      <Button to="/student-offer-history">
-        Historial
-      </Button>
+      <p>Para acceder a tu historial de postulaciones: {" "}
+        <Button onClick={navigateToStudentOfferHistory}>
+          Historial
+        </Button>
+      </p>
       {isLoading ? (
         <div className="spinner-container">
           <Spinner animation="border" role="status" className="spinner" />

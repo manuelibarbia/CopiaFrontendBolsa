@@ -86,7 +86,7 @@ function App() {
                   element={<StudentInOfferKnowledge />}
                 />
                 <Route //NUEVA RUTA
-                  path="student-offer-history"
+                  path="/student-offer-history"
                   element={<OfferStudentHistory />}
                 />
                 <Route path="*" element={<NotFound />} />

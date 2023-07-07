@@ -28,10 +28,12 @@ const OfferStudentHistory = () => {
   return (
     <div style={{ marginBlock: "20px" }}>
         {isLoading ? (
-            <Spinner />
+          <div className="spinner-container">
+            <Spinner animation="border" role="status" className="spinner" />
+          </div>
         ) : (
             <>
-                <h1>Historial de postulaciones</h1>
+                <h1 style={{textAlign: 'center'}}>Mi historial de postulaciones</h1>
                 {studentOfferHistory.length === 0 ? (
                         <h2>Tu historial de ofertas está vacío. Si querés buscar ofertas, accedé a la pestaña "Últimos empleos" o...
                         <Link to="/Offers" className="highlight-link">
@@ -56,9 +58,13 @@ const OfferStudentHistory = () => {
                                     Fecha de postulación{" "}
                                     {format(new Date(studentOffer.applicationDate), "dd/MM/yyyy")}
                                 </Card.Text>
+                                <Card.Title style={{textDecoration: 'underline'}}>Estado de la oferta</Card.Title>
+                                {studentOffer.offer.offerIsActive ? 
+                                  (<Card.Text style={{color: 'green'}}>Oferta vigente</Card.Text>) :
+                                  (<Card.Text style={{color: 'red'}}>Oferta borrada</Card.Text>)}
                                 {studentOffer.studentOfferIsActive && studentOffer.offer.offerIsActive ? 
-                                (<Card.Text style={{color: 'green'}}>Postulado</Card.Text>) : 
-                                (<Card.Text style={{color: 'red'}}>No postulado</Card.Text>
+                                  (<Card.Text style={{color: 'green'}}>Postulado</Card.Text>) : 
+                                  (<Card.Text style={{color: 'red'}}>No postulado</Card.Text>
                                 )}
                                 </Card.Body>
                             </Card>
