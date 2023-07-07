@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Form, Button, Table, Alert, Card } from "react-bootstrap";
+import { Form, Button, Table, Alert, Card, Spinner } from "react-bootstrap";
 import { UserContext } from "../../context/UserContext";
 import {
   getKnowledge,
@@ -12,6 +12,8 @@ export default function KnowledgeStudent() {
   const { user } = useContext(UserContext);
   const [knowledgeList, setKnowledgeList] = useState([]);
   const [studentKnowledgeList, setStudentKnowledgeList] = useState([]);
+  const [knowledgeListIsLoading, setKnowledgeListIsLoading] = useState(false);
+  const [studentKnowledgeListIsLoading, setStudentKnowledgeListIsLoading] = useState(false);
   const [successAlert, setSuccessAlert] = useState(null);
   const [errorAlert, setErrorAlert] = useState(null);
   const [successAlertAdd, setSuccessAlertAdd] = useState(null);
@@ -23,6 +25,7 @@ export default function KnowledgeStudent() {
   }, []);
 
   const fetchKnowledgeList = async () => {
+    setKnowledgeListIsLoading(true);
     try {
       const response = await getKnowledge(user.token);
       if (response.ok) {
@@ -31,10 +34,13 @@ export default function KnowledgeStudent() {
       }
     } catch (error) {
       setErrorAlert(error.message);
+    } finally {
+      setKnowledgeListIsLoading(false);
     }
   };
 
   const fetchStudentKnowledgeList = async () => {
+    setStudentKnowledgeListIsLoading(true);
     try {
       const response = await getStudentKnowledge(user.token);
       if (response.ok) {
@@ -43,6 +49,8 @@ export default function KnowledgeStudent() {
       }
     } catch (error) {
       setErrorAlert(error.message);
+    } finally {
+      setStudentKnowledgeListIsLoading(false);
     }
   };
 
@@ -67,7 +75,7 @@ export default function KnowledgeStudent() {
       setStudentKnowledgeList((prevList) =>
         prevList.filter((knowledge) => knowledge.knowledgeId !== knowledgeId)
       );
-      setSuccessAlert("Eliminista el conocimiento de tu lista");
+      setSuccessAlert("Eliminaste el conocimiento de tu lista");
     } catch (error) {
       setErrorAlert(error.message);
     }
@@ -75,6 +83,7 @@ export default function KnowledgeStudent() {
 
   return (
     <div className="container">
+      <h1 style={{textAlign: 'center'}}>Mis conocimientos</h1>
       <Card>
         <Card.Body>
           <Form>
@@ -98,39 +107,54 @@ export default function KnowledgeStudent() {
                 </Alert>
               )}
             </Form.Group>
-            <div className="mb-3">
-              Agrega los conocimientos que posees, esto te ayudará a conseguir
-              mejores propuestas
-            </div>
-            {knowledgeList.length > 0 && (
-              <Table striped bordered hover style={{ width: "100%" }}>
-                <thead>
-                  <tr>
-                    <th>Tipo</th>
-                    <th>Nivel</th>
-                    <th>Acciones</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {knowledgeList.map((knowledge) => (
-                    <tr key={knowledge.knowledgeId}>
-                      <td style={{ width: "33%" }}>{knowledge.type}</td>
-                      <td style={{ width: "33%" }}>{knowledge.level}</td>
-                      <td style={{ width: "34%" }}>
-                        <Button
-                          variant="success"
-                          onClick={() =>
-                            handleAddKnowledgeToStudent(knowledge.knowledgeId)
-                          }
-                        >
-                          Agregar conocimiento
-                        </Button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </Table>
+            {knowledgeListIsLoading ? (
+              <>
+                <p>Cargando listado de conocimientos</p>
+                <Spinner animation="border" role="status"/>
+              </>
+            ) : (
+              <>
+                  <h3>Conocimientos disponibles</h3>
+                  {knowledgeList.length > 0 ? (
+                  <>
+                    <div className="mb-3">
+                      Agregá los conocimientos que poseas, esto te ayudará a conseguir
+                      mejores propuestas laborales
+                    </div>
+                      <Table striped bordered hover style={{ width: "100%" }}>
+                        <thead>
+                          <tr>
+                            <th>Tipo</th>
+                            <th>Nivel</th>
+                            <th>Agregar conocimiento</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {knowledgeList.map((knowledge) => (
+                            <tr key={knowledge.knowledgeId}>
+                              <td style={{ width: "33%" }}>{knowledge.type}</td>
+                              <td style={{ width: "33%" }}>{knowledge.level}</td>
+                              <td style={{ width: "34%" }}>
+                                <Button
+                                  variant="success"
+                                  onClick={() =>
+                                    handleAddKnowledgeToStudent(knowledge.knowledgeId)
+                                  }
+                                >
+                                  +
+                                </Button>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </Table>
+                  </>
+                ) : (
+                  <div className="mb-3">No hay conocimientos para agregar</div>
+                )}
+              </>
             )}
+            
           </Form>
         </Card.Body>
       </Card>
@@ -138,9 +162,6 @@ export default function KnowledgeStudent() {
       <Card>
         <Card.Body>
           <Form>
-            <div className="mb-3">
-              Estos son tus conocimientos, puedes eliminarlos cuando quieras
-            </div>
             <Form.Group controlId="selectedType">
               {successAlert && (
                 <Alert
@@ -161,40 +182,53 @@ export default function KnowledgeStudent() {
                 </Alert>
               )}
             </Form.Group>
-
-            {studentKnowledgeList.length > 0 ? (
-              <Table striped bordered hover style={{ width: "100%" }}>
-                <thead>
-                  <tr>
-                    <th>Tipo</th>
-                    <th>Nivel</th>
-                    <th>Acciones</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {studentKnowledgeList.map((knowledge) => (
-                    <tr key={knowledge.knowledgeId}>
-                      <td style={{ width: "33%" }}>{knowledge.type}</td>
-                      <td style={{ width: "33%" }}>{knowledge.level}</td>
-                      <td style={{ width: "34%" }}>
-                        <Button
-                          variant="danger"
-                          onClick={() =>
-                            handleDeleteKnowledgeFromStudent(
-                              knowledge.knowledgeId
-                            )
-                          }
-                        >
-                          Eliminar conocimiento
-                        </Button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </Table>
-            ) : (
-              <div>No tienes conocimientos registrados.</div>
-            )}
+            {studentKnowledgeListIsLoading ? (
+              <>
+                <p>Cargando conocimientos propios</p>
+                <Spinner animation="border" role="status"/>
+              </>) 
+              : (
+              <>
+                <h3>Conocimientos personales</h3>
+                {studentKnowledgeList.length > 0 ? (
+                  <>
+                    <div className="mb-3">
+                      Estos son tus conocimientos, podés eliminarlos cuando quieras
+                    </div>
+                    <Table striped bordered hover style={{ width: "100%" }}>
+                      <thead>
+                        <tr>
+                          <th>Tipo</th>
+                          <th>Nivel</th>
+                          <th>Eliminar conocimiento</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {studentKnowledgeList.map((knowledge) => (
+                          <tr key={knowledge.knowledgeId}>
+                            <td style={{ width: "33%" }}>{knowledge.type}</td>
+                            <td style={{ width: "33%" }}>{knowledge.level}</td>
+                            <td style={{ width: "34%" }}>
+                              <Button
+                                variant="danger"
+                                onClick={() =>
+                                  handleDeleteKnowledgeFromStudent(
+                                    knowledge.knowledgeId
+                                  )
+                                }
+                              >
+                                -
+                              </Button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </Table>
+                  </>
+                  ) : (
+                    <div>No tenés conocimientos registrados.</div>
+                )}
+              </>)}
           </Form>
         </Card.Body>
       </Card>
