@@ -6,7 +6,6 @@ import RegisterPersonalInfoForm from "./components/Students/RegisterPersonalInfo
 import Home from "./components/Home/Home";
 import Footer from "./components/Footer/Footer";
 import { Container } from "react-bootstrap";
-import AdminForm from "./components/Admin/AdminForm";
 import RecoverPassword from "./components/Login/RecoverPassword";
 import Login from "./components/Login/Login";
 import UniversityInfoForm from "./components/Students/UniversityInfoForm";
@@ -52,7 +51,6 @@ function App() {
                 />
 
                 <Route path="/company-form" element={<CompanyInfoForm />} />
-                <Route path="/admin" element={<AdminForm />} />
                 <Route path="/recover-password" element={<RecoverPassword />} />
 
                 <Route path="/createOffer" element={<CreateOffer />} />
