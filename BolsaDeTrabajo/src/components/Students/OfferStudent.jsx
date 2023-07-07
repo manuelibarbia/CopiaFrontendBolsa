@@ -2,11 +2,12 @@ import React, { useEffect, useState, useContext } from "react";
 import { UserContext } from "../../context/UserContext";
 import { getStudentOffers, deleteStudentToOffer } from "../../api";
 import { format } from "date-fns";
-import { Card, Button, Alert } from "react-bootstrap";
+import { Card, Button, Alert, Spinner } from "react-bootstrap";
 import { Link } from "react-router-dom"
 const OfferStudent = () => {
   const { user } = useContext(UserContext);
   const [offers, setOffers] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [offerId, setOfferId] = useState(null);
@@ -18,7 +19,11 @@ const OfferStudent = () => {
       })
       .catch((error) => {
         setError(error.message);
-      });
+      })
+      .finally(() => {
+        setIsLoading(false);
+      })
+      ;
   }, []);
 
   const handleRemoveStudentFromOffer = (offerId) => {
@@ -48,54 +53,62 @@ const OfferStudent = () => {
       <Button to="/student-offer-history">
         Historial
       </Button>
-      {offers.length === 0 ? (
+      {isLoading ? (
+        <div className="spinner-container">
+          <Spinner animation="border" role="status" className="spinner" />
+        </div>
+      ) : (
+        <>
+          {offers.length === 0 ? (
           <h2>No estás registrado en ninguna oferta. Si querés buscar ofertas, accedé a la pestaña "Últimos empleos" o...
             <Link to="/Offers" className="highlight-link">
               <Button>Hacé click acá</Button>
             </Link>
           </h2>
-      ) : (
-        offers.map((offer, index) => (
-          <Card
-            key={offer.offerId}
-            className={index % 2 === 0 ? "even-card" : "odd-card"}
-          >
-            <Card.Body>
-              <Card.Title>{offer.company.companyName}</Card.Title>
-              <Card.Title>Busca {offer.offerTitle}</Card.Title>
-              <Card.Subtitle className="mb-2 text-muted">
-                Con conocimiento excluyente en: {offer.offerSpecialty}
-              </Card.Subtitle>
-              <Card.Text>{offer.offerDescription}</Card.Text>
-              <Card.Text>
-                Fecha de publicación{" "}
-                {format(new Date(offer.createdDate), "dd/MM/yyyy")}
-              </Card.Text>
-              <Card.Text>Rubro: {offer.company.companyLine}</Card.Text>
-              <Card.Text>Ciudad: {offer.company.companyLocation}</Card.Text>
-              <Button
-                onClick={() => handleRemoveStudentFromOffer(offer.offerId)}
-                variant="danger"
+          ) : (
+            offers.map((offer, index) => (
+              <Card
+                key={offer.offerId}
+                className={index % 2 === 0 ? "even-card" : "odd-card"}
               >
-                Eliminar postulación
-              </Button>
-            </Card.Body>
-            {success && offer.offerId === offerId && (
-              <Alert
-                variant="success"
-                dismissible
-                onClose={() => setSuccess("")}
-              >
-                {success}
-              </Alert>
-            )}
-            {error && offer.offerId === offerId && (
-              <Alert variant="danger" dismissible onClose={() => setError("")}>
-                {error}
-              </Alert>
-            )}
-          </Card>
-        ))
+                <Card.Body>
+                  <Card.Title>{offer.company.companyName}</Card.Title>
+                  <Card.Title>Busca {offer.offerTitle}</Card.Title>
+                  <Card.Subtitle className="mb-2 text-muted">
+                    Con conocimiento excluyente en: {offer.offerSpecialty}
+                  </Card.Subtitle>
+                  <Card.Text>{offer.offerDescription}</Card.Text>
+                  <Card.Text>
+                    Fecha de publicación{" "}
+                    {format(new Date(offer.createdDate), "dd/MM/yyyy")}
+                  </Card.Text>
+                  <Card.Text>Rubro: {offer.company.companyLine}</Card.Text>
+                  <Card.Text>Ciudad: {offer.company.companyLocation}</Card.Text>
+                  <Button
+                    onClick={() => handleRemoveStudentFromOffer(offer.offerId)}
+                    variant="danger"
+                  >
+                    Eliminar postulación
+                  </Button>
+                </Card.Body>
+                {success && offer.offerId === offerId && (
+                  <Alert
+                    variant="success"
+                    dismissible
+                    onClose={() => setSuccess("")}
+                  >
+                    {success}
+                  </Alert>
+                )}
+                {error && offer.offerId === offerId && (
+                  <Alert variant="danger" dismissible onClose={() => setError("")}>
+                    {error}
+                  </Alert>
+                )}
+              </Card>
+            ))
+          )}
+        </>
       )}
     </div>
   );
