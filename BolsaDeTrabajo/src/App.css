@@ -6,3 +6,15 @@ body {
   background: linear-gradient(to right, #214e44, #292b4e);
   color: #fff;
 }
+
+.spinner-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.spinner {
+  width: 5rem;
+  height: 5rem;
+}

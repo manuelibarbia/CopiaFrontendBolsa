@@ -50,9 +50,6 @@ const NavBar = () => {
               <Link to="/Offers" className="nav-link">
                 Ultimos empleos
               </Link>
-              <Link to="/student-offer-history" className="nav-link">
-                Historial
-              </Link>
             </Nav>
           </Col>
           <Col xs={3} className="text-right">
