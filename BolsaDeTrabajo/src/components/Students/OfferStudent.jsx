@@ -35,7 +35,7 @@ const OfferStudent = () => {
 
         setTimeout(() => {
           const updatedOffers = studentOffers.filter(
-            (offer) => offer.offerId !== offerId
+            (studentOffer) => studentOffer.offer.offerId !== offerId
           );
           setStudentOffers(updatedOffers);
         }, 2000);
