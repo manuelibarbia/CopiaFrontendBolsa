@@ -49,7 +49,7 @@ const StudentMenu = () => {
 
         <Dropdown.Menu>
           <Dropdown.Item as={Link} to="/addressStudent" style={{ margin: "0px" }}>
-            <FaUser className="mr-2" /> Domicilio
+            <FaUser className="mr-2" /> Domicilio y teléfono
           </Dropdown.Item>
           <Dropdown.Item
             as={Link}
@@ -57,9 +57,6 @@ const StudentMenu = () => {
             style={{ margin: "0px" }}
           >
             <FaClipboard className="mr-2" /> Datos facultativos
-          </Dropdown.Item>
-          <Dropdown.Item as={Link} to="/uploadCV" style={{ margin: "0px" }}>
-            <FaFilePdf className="mr-2" /> Cargar CV
           </Dropdown.Item>
 
           <Dropdown.Item
@@ -70,12 +67,16 @@ const StudentMenu = () => {
             <FaCode className="mr-2" /> Agregar conocimientos
           </Dropdown.Item>
 
-          <Dropdown.Item as={Link} to="/offerStudent" style={{ margin: "0px" }}>
-            <FaBriefcase className="mr-2" /> Ver mis ofertas
+          <Dropdown.Item as={Link} to="/uploadCV" style={{ margin: "0px" }}>
+            <FaFilePdf className="mr-2" /> Cargar CV
           </Dropdown.Item>
 
           <Dropdown.Item as={Link} to="/CVStudent" style={{ margin: "0px" }}>
-            <FaFilePdf className="mr-2" /> Ver mi CV
+            <FaFilePdf className="mr-2" /> Ver CV
+          </Dropdown.Item>
+
+          <Dropdown.Item as={Link} to="/offerStudent" style={{ margin: "0px" }}>
+            <FaBriefcase className="mr-2" /> Ver mis postulaciones
           </Dropdown.Item>
 
           <Dropdown.Item
