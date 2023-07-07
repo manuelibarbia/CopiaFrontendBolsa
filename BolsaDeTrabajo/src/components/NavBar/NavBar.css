@@ -1,0 +1,23 @@
+img {
+  width: 50px;
+}
+a {
+  text-decoration: none;
+  color: aliceblue;
+  margin: 0px 50px 0px 50px;
+}
+
+.nav-link {
+  color: #ffffff;
+  text-decoration: none;
+  margin-right: 15px;
+  transition: color 0.3s ease, transform 0.3s ease, z-index 0.3s ease;
+  position: relative;
+  z-index: 1;
+}
+
+.nav-link:hover {
+  color: #a7eeab;
+  transform: scale(1.1);
+  z-index: 2;
+}

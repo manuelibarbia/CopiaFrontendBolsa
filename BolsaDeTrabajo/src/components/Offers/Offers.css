@@ -1,0 +1,19 @@
+.even-card {
+  background-color: #e6f7ff; /* Color de fondo para las cards de índice par */
+  margin-bottom: 10px; /* Separación entre las cards */
+}
+
+.odd-card {
+  background-color: #f2f2f2; /* Color de fondo para las cards de índice impar */
+  margin-bottom: 10px; /* Separación entre las cards */
+}
+
+.highlight-link {
+  color: #50694bbd;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.highlight-link:hover {
+  text-decoration: none;
+}

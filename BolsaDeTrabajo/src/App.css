@@ -1,0 +1,8 @@
+body {
+  background-color: rgb(250, 248, 248);
+}
+
+.custom-gradient {
+  background: linear-gradient(to right, #214e44, #292b4e);
+  color: #fff;
+}
