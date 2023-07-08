@@ -794,9 +794,11 @@ export async function downloadStudentCvForCompany(userId, token) {
     );
 
     if (!response.ok) {
-      throw new Error("Error en la solicitud");
+      const errorResponse = await response.text();
+      const errorMessage = errorResponse || "Error desconocido";
+      throw new Error(errorMessage);
     }
-    const data = await response;
+    const data = await response.json();
     return data;
   } catch (error) {
     console.error(error);

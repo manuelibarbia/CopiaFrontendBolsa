@@ -36,7 +36,7 @@ const StudentsInOffer = () => {
       downloadLink.download = `${student.name}-cv.pdf`;
       downloadLink.click();
     } catch (error) {
-      console.error(error);
+      setApiError(error.message);
     }
   };
 
