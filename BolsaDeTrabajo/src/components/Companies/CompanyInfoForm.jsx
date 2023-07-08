@@ -44,11 +44,6 @@ const CompanyInfoForm = () => {
     return CUITRegex.test(CUIT);
   }
 
-  const validateAddress = (companyAddress) => {
-    const addressRegex = /^[a-zA-Z0-9]+\s[0-9]+$/;
-    return addressRegex.test(companyAddress);
-  }
-
   const validatePhoneNumber = (phoneNumber) => {
     const phoneNumberRegex = /^\d{10}$/;
     return phoneNumberRegex.test(phoneNumber);
@@ -74,58 +69,47 @@ const CompanyInfoForm = () => {
 
   const handleCreateCompany = async (event) => {
     event.preventDefault();
+    setApiError("");
+    setFrontError("");
+    setApiError("");
 
     if (!userName || !password || !confirmPassword || !companyCUIT || !companyLine || !companyName || !companyAddress || !companyLocation || !companyPostalCode || !companyPhone || !companyWebPage || !companyPersonalName || !companyPersonalSurname || !companyPersonalJob || !companyPersonalPhone || !companyPersonalEmail || !companyRelationContact) {
-      setApiSuccess("");
       setFrontError("Todos los campos deben estar completos");
       return;
     }
 
     const passwordIsValid = validatePassword(password);
     if (!passwordIsValid) {
-      setApiSuccess("");
       setFrontError("Contraseña insegura, debe contener al menos una letra mayúscula, una minúscula, un número y un caracter especial. 8 en total")
       return;
     }
 
     const confirmPasswordIsValid = validateConfirmPassword(password, confirmPassword);
     if (!confirmPasswordIsValid) {
-      setApiSuccess("");
       setFrontError("Los campos introducidos de contraseña no coinciden");
       return;
     }
 
     const isCUIT = validateCUIT(companyCUIT);
     if (!isCUIT) {
-      setApiSuccess("");
       setFrontError("El CUIT debe ser un número entero positivo de 11 dígitos");
-      return;
-    }
-
-    const addressIsValid = validateAddress(companyAddress);
-    if (!addressIsValid) {
-      setApiSuccess("");
-      setFrontError("Domicilio no válido");
       return;
     }
 
     const isPhoneNumber = validatePhoneNumber(companyPhone);
     if (!isPhoneNumber) {
-      setApiSuccess("");
       setFrontError("Teléfono de la empresa no válido, debe contener 10 dígitos");
       return;
     }
 
     const isPersonalPhoneNumber = validatePhoneNumber(companyPersonalPhone);
     if (!isPersonalPhoneNumber) {
-      setApiSuccess("");
       setFrontError("Teléfono personal no válido, debe contener 10 dígitos");
       return;
     }
 
     const phoneNumbersAreDifferent = validateBothPhones(companyPhone, companyPersonalPhone);
     if (!phoneNumbersAreDifferent) {
-      setApiSuccess("");
       setFrontError("Los números de teléfono deben ser diferentes");
       return;
     }
@@ -133,14 +117,12 @@ const CompanyInfoForm = () => {
     const nameIsValid = validateNameOrSurname(companyPersonalName);
     const surnameIsValid = validateNameOrSurname(companyPersonalSurname);
     if (!nameIsValid || !surnameIsValid) {
-      setApiSuccess("");
       setFrontError("Nombre y/o apellido no válido");
       return;
     }
 
     const emailIsValid = validateEmail(companyPersonalEmail);
     if (!emailIsValid) {
-      setApiSuccess("");
       setFrontError(
         "El Email introducido no es válido. Debe ser una dirección de correo como ejemplo@gmail.com"
       );
@@ -149,7 +131,6 @@ const CompanyInfoForm = () => {
 
     const contactIsValid = validateNameOrSurname(companyRelationContact);
     if (!contactIsValid) {
-      setApiSuccess("");
       setFrontError("Persona de contacto no válida");
       return;
     }
