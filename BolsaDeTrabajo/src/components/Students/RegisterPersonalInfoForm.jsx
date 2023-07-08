@@ -205,11 +205,8 @@ export default function PersonalInfoForm() {
         gender: gender,
         maritalStatus: maritalStatus,
       });
-      //navigate("/login"); //VER REDIRECCIÓN AL LOGIN POST REGISTRARSE
       setApiError("");
       setApiSuccess("Usuario creado correctamente");
-      console.log(data);
-      // Hacer algo con los datos retornados (data) después de crear el estudiante
     } catch (error) {
       setApiSuccess("");
       setApiError(error.message);

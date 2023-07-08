@@ -25,6 +25,7 @@ const CreateCareer = () => {
   }
 
   useEffect(() => {
+    setSuccess("");
     setApiError("");
     setFrontError("");
   }, [careerName, careerAbbreviation, careerType, careerTotalSubjects])
@@ -32,6 +33,9 @@ const CreateCareer = () => {
 
   const handleClickCreateCareer = async (event) => {
     event.preventDefault();
+    setSuccess("");
+    setApiError("");
+    setFrontError("");
     if (
       !careerName ||
       !careerAbbreviation ||
@@ -45,12 +49,8 @@ const CreateCareer = () => {
     
     const totalSubjectIsValid = validateTotalSubjects(careerTotalSubjects);
     if (!totalSubjectIsValid) {
-      setSuccess("");
       setFrontError("El total de materias solo puede contener números enteros positivos");
       return;
-    }
-    else {
-      setFrontError("");
     }
 
     try {

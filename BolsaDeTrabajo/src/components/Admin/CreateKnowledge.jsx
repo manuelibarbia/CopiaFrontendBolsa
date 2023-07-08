@@ -22,7 +22,6 @@ export default function CreateKnowledge() {
       if (response.ok) {
         const knowledgeData = await response.json();
         setKnowledgeList(knowledgeData);
-        console.log(knowledgeData);
       }
     } catch (error) {
       setErrorAlert(error.message);
