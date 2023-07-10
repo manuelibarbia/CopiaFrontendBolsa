@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { Form, Button, Alert } from "react-bootstrap";
+import { Form, Button, Alert, Spinner } from "react-bootstrap";
 import { recoverPassword } from "../../api";
 import "./Login.css";
 
 export default function RecoverPassword() {
   const [userName, setUserName] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const [apiError, setApiError] = useState("");
   const [apiSuccess, setApiSuccess] = useState("");
 
@@ -12,6 +13,7 @@ export default function RecoverPassword() {
     event.preventDefault();
 
     try {
+      setIsLoading(true);
       const response = await recoverPassword({ username: userName });
       setApiSuccess(response);
       setApiError("");
@@ -19,6 +21,8 @@ export default function RecoverPassword() {
       console.error(error);
       setApiError(error.message);
       setApiSuccess("");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -39,7 +43,11 @@ export default function RecoverPassword() {
         </Form.Group>
 
         <Button variant="primary" type="submit" style={{ marginTop: "20px" }}>
-          Recuperar contraseña
+            {isLoading ? (
+            <Spinner></Spinner>
+          ) : (
+            <p>Recuperar contraseña</p>
+          )}
         </Button>
 
         {apiError && <Alert variant="danger">{apiError}</Alert>}
