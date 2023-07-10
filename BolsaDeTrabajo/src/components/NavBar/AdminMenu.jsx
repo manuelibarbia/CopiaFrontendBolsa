@@ -8,6 +8,7 @@ import {
   FaSignOutAlt,
   FaTrashAlt,
   FaBuilding,
+  FaFilePdf
 } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { UserContext } from "../../context/UserContext";
@@ -63,6 +64,10 @@ const AdminMenu = () => {
             style={{ margin: "0px" }}
           >
             <FaBuilding className="mr-2" /> Ver empresas pendientes
+          </Dropdown.Item>
+
+          <Dropdown.Item as={Link} to="/students-with-pending-cv" style={{ margin: "0px" }}>
+            <FaFilePdf className="mr-2" /> Ver CVs pendientes 
           </Dropdown.Item>
 
           <Dropdown.Item

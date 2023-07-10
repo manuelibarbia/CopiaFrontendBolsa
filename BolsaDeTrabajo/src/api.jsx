@@ -187,16 +187,28 @@ export async function updatePendingCompany(companyId, token) {
   }
 }
 
-// export const fetchCVFiles = () => {
-//   return axios.get("/api/Admin/getPendingCVFiles")
-//     .then((response) => {
-//       return response.data;
-//     })
-//     .catch((error) => {
-//       console.error("Error al obtener los archivos: ", error);
-//       throw error;
-//     });
-// };
+export async function getStudentsWithPendingCV(token) {
+  try {
+    const response = await fetch(`${DB_DOMAIN}/Admin/getStudentsWithPendingCV`, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      const errorResponse = await response.text();
+      const errorMessage = errorResponse || "Error desconocido";
+      throw new Error(errorMessage);
+    }
+    const data = await response;
+    return data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
 
 // export async function updatePendingCVFile(CVId, token) {
 //   try {

@@ -28,6 +28,7 @@ import StudentsInOffer from "./components/Companies/StudentsInOffer";
 import KnowledgeStudent from "./components/Students/KnowledgeStudent";
 import StudentInOfferKnowledge from "./components/Companies/StudentInOfferKnowledge";
 import OfferStudentHistory from "./components/Students/OfferStudentHistory";
+import StudentsWithPendingCV from "./components/Admin/StudentsWithPendingCV";
 
 function App() {
   return (
@@ -78,6 +79,10 @@ function App() {
                   element={<PendingCompanies />}
                 />
                 <Route
+                  path="/students-with-pending-cv"
+                  element={<StudentsWithPendingCV />}
+                />
+                <Route
                   path="/studentsInOffer/:offerTitle/:offerId"
                   element={<StudentsInOffer />}
                 />
@@ -85,7 +90,7 @@ function App() {
                   path="student-in-offer-knowledge/:name/:surname/:userId"
                   element={<StudentInOfferKnowledge />}
                 />
-                <Route //NUEVA RUTA
+                <Route
                   path="/student-offer-history"
                   element={<OfferStudentHistory />}
                 />
