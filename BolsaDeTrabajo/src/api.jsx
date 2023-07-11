@@ -187,6 +187,36 @@ export async function updatePendingCompany(companyId, token) {
   }
 }
 
+export async function deletePendingCompany(companyId, token) {
+  try {
+    const response = await fetch(
+      `${DB_DOMAIN}/Admin/deletePendingCompany/${companyId}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error);
+    }
+
+    const responseText = await response.text();
+    if (responseText.length === 0) {
+      throw new Error("Error");
+    }
+
+    return JSON.parse(responseText);
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
 export async function getStudentsWithPendingCV(token) {
   try {
     const response = await fetch(`${DB_DOMAIN}/Admin/getStudentsWithPendingCV`, {

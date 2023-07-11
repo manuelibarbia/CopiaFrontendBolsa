@@ -1,11 +1,12 @@
 import React, { useEffect, useState, useContext } from "react";
 import { UserContext } from "../../context/UserContext";
-import { getPendingCompanies, updatePendingCompany } from "../../api";
+import { getPendingCompanies, updatePendingCompany, deletePendingCompany } from "../../api";
 import { Card, Button, Alert, Spinner } from "react-bootstrap";
 
 const PendingCompanies = () => {
   const { user } = useContext(UserContext);
   const [pendingCompanies, setPendingCompanies] = useState([]);
+  const [deletedMessage, setDeletedMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [isLoading, setIsLoading] = useState(true);
 
@@ -29,10 +30,25 @@ const PendingCompanies = () => {
         setPendingCompanies((prevCompanies) =>
           prevCompanies.filter((company) => company.userId !== companyId)
         );
+        setDeletedMessage("");
         setSuccessMessage(`La empresa ${companyName} ha sido habilitada exitosamente.`);
       })
       .catch((error) => {
         console.error(error);
+      });
+  };
+
+  const handleDeletePendingCompany = (companyId, companyName) => {
+    deletePendingCompany(companyId, user.token)
+      .then(() => {
+        setPendingCompanies((prevCompanies) =>
+          prevCompanies.filter((company) => company.userId !== companyId)
+        );
+        setSuccessMessage("");
+        setDeletedMessage(`La empresa ${companyName} ha sido borrada exitosamente.`);
+      })
+      .catch((error) => {
+        setApiError(error.message);
       });
   };
 
@@ -44,6 +60,7 @@ const PendingCompanies = () => {
         </div>
       ) : (
       <>
+        {deletedMessage && <Alert variant="danger">{deletedMessage}</Alert>}
         {successMessage && <Alert variant="success">{successMessage}</Alert>}
         {pendingCompanies.length > 0 ? (
           pendingCompanies.map((company, index) => (
@@ -66,12 +83,21 @@ const PendingCompanies = () => {
                 <Card.Text>Cargo: {company.companyPersonalJob}</Card.Text>
                 <Card.Text>Teléfono personal: {company.companyPersonalPhone}</Card.Text>
                 <Button
+                  style={{marginRight: '10px'}}
                   onClick={() =>
                     handleUpdatePendingCompany(company.userId, company.companyName)
                   }
                   variant="success"
                 >
                   Habilitar empresa
+                </Button>
+                <Button
+                  onClick={() =>
+                    handleDeletePendingCompany(company.userId, company.companyName)
+                  }
+                  variant="danger"
+                >
+                  Borrar empresa
                 </Button>
               </Card.Body>
             </Card>
