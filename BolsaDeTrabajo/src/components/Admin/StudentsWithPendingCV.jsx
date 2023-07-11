@@ -6,6 +6,7 @@ import { UserContext } from "../../context/UserContext";
 const StudentsWithPendingCV = () => {
   const [pendingStudents, setPendingStudents] = useState([]);
   const [apiError, setApiError] = useState("");
+  const [deletedMessage, setDeletedMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const { user } = useContext(UserContext);
@@ -44,6 +45,7 @@ const StudentsWithPendingCV = () => {
         setPendingStudents((prevStudents) =>
           prevStudents.filter((student) => student.userId !== studentId)
         );
+        setDeletedMessage("");
         setSuccessMessage(`El CV del alumno ${name} ${surname} ha sido habilitado exitosamente.`);
       })
       .catch((error) => {
@@ -57,7 +59,8 @@ const StudentsWithPendingCV = () => {
         setPendingStudents((prevStudents) =>
           prevStudents.filter((student) => student.userId !== studentId)
         );
-        setSuccessMessage(`El CV del alumno ${name} ${surname} ha sido borrado exitosamente.`);
+        setSuccessMessage("");
+        setDeletedMessage(`El CV del alumno ${name} ${surname} ha sido borrado exitosamente.`);
       })
       .catch((error) => {
         setApiError(error.message);
@@ -72,16 +75,19 @@ const StudentsWithPendingCV = () => {
         </div>
       ) : (
         <>
-          <h2>Listado de estudiantes con CV pendiente</h2>
+          <h1 style={{textAlign: 'center'}}>Estudiantes con CV pendiente</h1>
+          {deletedMessage && <Alert variant="danger">{deletedMessage}</Alert>}
           {successMessage && <Alert variant="success">{successMessage}</Alert>}
-          {apiError && <Alert variant="danger">{apiError}</Alert>}
+          {apiError && <h2 style={{textAlign: 'center'}}>{apiError}</h2>}
           {pendingStudents.map((student, index) => (
             <Card
               key={student.userId}
               className={index % 2 === 0 ? "even-card" : "odd-card"}
             >
             <Card.Body>
-              <Card.Text>{student.name} {" "} {student.surname}</Card.Text>
+              <Card.Title>{student.name} {" "} {student.surname}</Card.Title>
+              <Card.Text>DNI: {student.documentNumber}</Card.Text>
+              <Card.Text>Legajo: {student.file}</Card.Text>
               <Button
                 style={{marginRight: '10px'}}
                 onClick={() =>
