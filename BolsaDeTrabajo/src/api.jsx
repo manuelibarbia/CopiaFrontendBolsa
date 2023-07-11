@@ -1,4 +1,5 @@
-const DB_DOMAIN = "https://localhost:7069/api";
+// const DB_DOMAIN = "https://localhost:7069/api";
+const DB_DOMAIN = "https://bolsatrabajo.somee.com/api";
 
 // import axios from "axios";
 
@@ -709,7 +710,7 @@ export async function getOffers() {
 export async function getStudentOffers(studentId, token) {
   try {
     const response = await fetch(
-      `https://localhost:7069/api/Student/${studentId}/Offers`,
+      `${DB_DOMAIN}/Student/${studentId}/Offers`,
       {
         method: "GET",
         headers: {
@@ -734,7 +735,7 @@ export async function getStudentOffers(studentId, token) {
 export async function getCompanyOffers(companyId, token) {
   try {
     const response = await fetch(
-      `https://localhost:7069/api/Offer/ByCompany/${companyId}`,
+      `${DB_DOMAIN}/Offer/ByCompany/${companyId}`,
       {
         method: "GET",
         headers: {

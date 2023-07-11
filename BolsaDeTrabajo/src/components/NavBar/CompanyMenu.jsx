@@ -1,5 +1,5 @@
-import { useContext } from "react";
-import { Dropdown } from "react-bootstrap";
+import { useContext, useState } from "react";
+import { Dropdown, Modal, Button } from "react-bootstrap";
 import {
   FaCog,
   FaUser,
@@ -17,7 +17,7 @@ import { useNavigate } from "react-router-dom";
 const CompanyMenu = () => {
   const navigate = useNavigate();
   const { setUser, user } = useContext(UserContext);
-
+  const [showConfirmation, setShowConfirmation] = useState(false);
   const logoutUserClick = async () => {
     try {
       console.log(user.userId);
@@ -29,7 +29,15 @@ const CompanyMenu = () => {
     }
   };
 
-  const removeUserClick = async () => {
+  const handleCloseConfirmation = () => {
+    setShowConfirmation(false);
+  };
+
+  const removeUserClick = () => {
+    setShowConfirmation(true);
+  };
+
+  const handleConfirmDelete = async () => {
     try {
       const data = await deleteCompany(user.token, user.userId);
       setUser(null);
@@ -40,6 +48,7 @@ const CompanyMenu = () => {
   };
 
   return (
+    <>
     <Dropdown>
       <Dropdown.Toggle id="dropdown-basic">
         <FaBars className="mr-2" />
@@ -73,6 +82,23 @@ const CompanyMenu = () => {
         </Dropdown.Item>
       </Dropdown.Menu>
     </Dropdown>
+    <Modal show={showConfirmation} onHide={handleCloseConfirmation} centered>
+    <Modal.Header closeButton>
+      <Modal.Title>Confirmar eliminación de cuenta</Modal.Title>
+    </Modal.Header>
+    <Modal.Body>
+      <p>¿Estás seguro que deseas eliminar tu cuenta?</p>
+    </Modal.Body>
+    <Modal.Footer>
+      <Button variant="secondary" onClick={handleCloseConfirmation}>
+        Cancelar
+      </Button>
+      <Button variant="danger" onClick={handleConfirmDelete}>
+        Eliminar
+      </Button>
+    </Modal.Footer>
+  </Modal>
+  </>
   );
 };
 
