@@ -1,11 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
-import { getStudentsWithPendingCV } from "../../api";
+import { getStudentsWithPendingCV, acceptPendingCV, deletePendingCV } from "../../api";
 import { Card, Button, Alert, Spinner } from "react-bootstrap";
 import { UserContext } from "../../context/UserContext";
 
 const StudentsWithPendingCV = () => {
-  const [students, setStudents] = useState([]);
+  const [pendingStudents, setPendingStudents] = useState([]);
   const [apiError, setApiError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const { user } = useContext(UserContext);
 
@@ -13,7 +14,7 @@ const StudentsWithPendingCV = () => {
     getStudentsWithPendingCV(user.token)
       .then((response) => response.json())
       .then((data) => {
-        setStudents(data);
+        setPendingStudents(data);
       })
       .catch((error) => {
         setApiError(error.message);
@@ -22,6 +23,32 @@ const StudentsWithPendingCV = () => {
         setIsLoading(false)
       });
   }, []);
+
+  const handleAcceptPendingCV = (studentId, name, surname) => {
+    acceptPendingCV(studentId, user.token)
+      .then(() => {
+        setPendingStudents((prevStudents) =>
+          prevStudents.filter((student) => student.userId !== studentId)
+        );
+        setSuccessMessage(`El CV del alumno ${name} ${surname} ha sido habilitado exitosamente.`);
+      })
+      .catch((error) => {
+        setApiError(error.message);
+      });
+  };
+
+  const handleDeletePendingCV = (studentId, name, surname) => {
+    deletePendingCV(studentId, user.token)
+      .then(() => {
+        setPendingStudents((prevStudents) =>
+          prevStudents.filter((student) => student.userId !== studentId)
+        );
+        setSuccessMessage(`El CV del alumno ${name} ${surname} ha sido borrado exitosamente.`);
+      })
+      .catch((error) => {
+        setApiError(error.message);
+      });
+  };
 
   return (
     <div>
@@ -32,8 +59,9 @@ const StudentsWithPendingCV = () => {
       ) : (
         <>
           <h2>Listado de estudiantes con CV pendiente</h2>
+          {successMessage && <Alert variant="success">{successMessage}</Alert>}
           {apiError && <Alert variant="danger">{apiError}</Alert>}
-          {students.map((student, index) => (
+          {pendingStudents.map((student, index) => (
             <Card
               key={student.userId}
               className={index % 2 === 0 ? "even-card" : "odd-card"}
@@ -49,12 +77,21 @@ const StudentsWithPendingCV = () => {
                 Descargar CV
               </Button>
               <Button
+                style={{marginRight: '10px'}}
                 onClick={() =>
-                  handleUpdatePendingCVFile(student.userId)
+                  handleAcceptPendingCV(student.userId, student.name, student.surname)
                 }
                 variant="success"
               >
                 Confirmar CV
+              </Button>
+              <Button
+                onClick={() =>
+                  handleDeletePendingCV(student.userId, student.name, student.surname)
+                }
+                variant="danger"
+              >
+                Borrar CV
               </Button>
             </Card.Body>
             </Card>
