@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { getStudentsWithPendingCV, acceptPendingCV, deletePendingCV } from "../../api";
+import { getStudentsWithPendingCV, downloadStudentCVForAdmin, acceptPendingCV, deletePendingCV } from "../../api";
 import { Card, Button, Alert, Spinner } from "react-bootstrap";
 import { UserContext } from "../../context/UserContext";
 
@@ -23,6 +23,20 @@ const StudentsWithPendingCV = () => {
         setIsLoading(false)
       });
   }, []);
+
+  const handleDownloadPendingCV = async (studentId, name, surname) => {
+    try {
+      const response = await downloadStudentCVForAdmin(studentId, user.token);
+      const blob = await response.blob();
+
+      const downloadLink = document.createElement("a");
+      downloadLink.href = URL.createObjectURL(blob);
+      downloadLink.download = `${name}-${surname}-cv.pdf`;
+      downloadLink.click();
+    } catch (error) {
+      setApiError(error.message);
+    }
+  };
 
   const handleAcceptPendingCV = (studentId, name, surname) => {
     acceptPendingCV(studentId, user.token)
@@ -71,7 +85,7 @@ const StudentsWithPendingCV = () => {
               <Button
                 style={{marginRight: '10px'}}
                 onClick={() =>
-                  downloadPendingCV(student.userId)
+                  handleDownloadPendingCV(student.userId, student.name, student.surname)
                 }
               >
                 Descargar CV
