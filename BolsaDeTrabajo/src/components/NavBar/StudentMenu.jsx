@@ -1,6 +1,6 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Dropdown } from "react-bootstrap";
+import { Dropdown, Modal, Button } from "react-bootstrap";
 import {
   FaUser,
   FaClipboard,
@@ -17,6 +17,7 @@ import { logout } from "../../api";
 import { deleteStudent } from "../../api";
 
 const StudentMenu = () => {
+  const [showConfirmation, setShowConfirmation] = useState(false);
   const navigate = useNavigate();
   const { setUser, user } = useContext(UserContext);
 
@@ -30,7 +31,11 @@ const StudentMenu = () => {
     }
   };
 
-  const removeUserClick = async () => {
+  const handleCloseConfirmation = () => {
+    setShowConfirmation(false);
+  };
+
+  const handleConfirmDelete = async () => {
     try {
       const data = await deleteStudent(user.token, user.userId);
       setUser(null);
@@ -38,6 +43,10 @@ const StudentMenu = () => {
     } catch (error) {
       console.error(error);
     }
+  };
+
+  const removeUserClick = () => {
+    setShowConfirmation(true);
   };
 
   return (
@@ -48,7 +57,11 @@ const StudentMenu = () => {
         </Dropdown.Toggle>
 
         <Dropdown.Menu>
-          <Dropdown.Item as={Link} to="/addressStudent" style={{ margin: "0px" }}>
+          <Dropdown.Item
+            as={Link}
+            to="/addressStudent"
+            style={{ margin: "0px" }}
+          >
             <FaUser className="mr-2" /> Domicilio y teléfono
           </Dropdown.Item>
           <Dropdown.Item
@@ -87,14 +100,31 @@ const StudentMenu = () => {
             <FaSignOutAlt className="mr-2" /> Cerrar sesión
           </Dropdown.Item>
           <Dropdown.Item
-            onClick={removeUserClick}
             type="button"
             style={{ margin: "0px" }}
+            onClick={removeUserClick}
           >
             <FaTrashAlt className="mr-2" /> Eliminar cuenta
           </Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>
+
+      <Modal show={showConfirmation} onHide={handleCloseConfirmation} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Confirmar eliminación de cuenta</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>¿Estás seguro que deseas eliminar tu cuenta?</p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseConfirmation}>
+            Cancelar
+          </Button>
+          <Button variant="danger" onClick={handleConfirmDelete}>
+            Eliminar
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 };
