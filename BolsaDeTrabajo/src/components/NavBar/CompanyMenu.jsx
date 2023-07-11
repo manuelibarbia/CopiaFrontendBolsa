@@ -53,6 +53,10 @@ const CompanyMenu = () => {
           <FaClipboard className="mr-2" /> Cargar ofertas
         </Dropdown.Item>
 
+        <Dropdown.Item as={Link} to="/change-password" style={{ margin: "0px" }}>
+          <FaUser className="mr-2" /> Cambiar contraseña
+        </Dropdown.Item>
+
         <Dropdown.Item
           type="button"
           onClick={logoutUserClick}
