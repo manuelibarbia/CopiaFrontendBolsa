@@ -49,7 +49,7 @@ function Offers() {
       );
       if (response === true) {
         setMessage(
-          "Te inscribiste correctamente. En la sección 'Ver mis ofertas' podrás ver más detalles."
+          "Te inscribiste correctamente. En la sección 'Ver mis postulaciones' podrás ver más detalles."
         );
         setError("");
       }
@@ -137,7 +137,7 @@ function Offers() {
                 )}
                 {user && <Card.Text>{offer.offerDescription}</Card.Text>}
                 <Card.Text>
-                  {format(new Date(offer.createdDate), "dd/MM/yyyy")}
+                  Fecha de creación: {format(new Date(offer.createdDate), "dd/MM/yyyy")}
                 </Card.Text>
                 {user && user.userType === "Student" && (
                   <Button
