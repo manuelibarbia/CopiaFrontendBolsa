@@ -756,6 +756,34 @@ export async function getCompanyOffers(companyId, token) {
   }
 }
 
+export async function changePassword({token, userId, userData}) {
+  try {
+    const response = await fetch(`${DB_DOMAIN}/User/changePassword/${userId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        currentPassword: userData.currentPassword,
+        newPassword: userData.newPassword,
+        confirmNewPassword: userData.confirmNewPassword,
+      }),
+    });
+
+    if (!response.ok) {
+      const errorResponse = await response.text();
+      const errorMessage = errorResponse || "Error desconocido";
+      throw new Error(errorMessage);
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
 export async function recoverPassword(userName) {
   try {
     const response = await fetch(`${DB_DOMAIN}/User/recoverPassword`, {

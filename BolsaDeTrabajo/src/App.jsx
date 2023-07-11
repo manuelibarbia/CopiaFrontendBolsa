@@ -29,6 +29,7 @@ import KnowledgeStudent from "./components/Students/KnowledgeStudent";
 import StudentInOfferKnowledge from "./components/Companies/StudentInOfferKnowledge";
 import OfferStudentHistory from "./components/Students/OfferStudentHistory";
 import StudentsWithPendingCV from "./components/Admin/StudentsWithPendingCV";
+import ChangePassword from "./components/Users/ChangePassword";
 
 function App() {
   return (
@@ -42,6 +43,7 @@ function App() {
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/login" element={<Login />} />
+                <Route path="/change-password" element={<ChangePassword />} />
 
                 <Route path="/sign-in-option" element={<SignIn />} />
 
