@@ -210,6 +210,31 @@ export async function getStudentsWithPendingCV(token) {
   }
 }
 
+export async function downloadStudentCVForAdmin(studentId, token) {
+  try {
+    const response = await fetch(
+      `${DB_DOMAIN}/Admin/getStudentCV/${studentId}`,
+      {
+        method: "GET",
+        headers: {
+          Accept: "application/pdf",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (!response.ok) {
+      const errorResponse = await response.text();
+      const errorMessage = errorResponse || "Error desconocido";
+      throw new Error(errorMessage);
+    }
+    return response;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
 export async function acceptPendingCV(studentId, token) {
   try {
     const response = await fetch(
@@ -496,10 +521,11 @@ export async function downloadCV(token) {
     });
 
     if (!response.ok) {
-      throw new Error("Currículum no encontrado");
+      const errorResponse = await response.text();
+      const errorMessage = errorResponse || "Error desconocido";
+      throw new Error(errorMessage);
     }
-    const data = await response;
-    return data;
+    return response;
   } catch (error) {
     console.error(error);
     throw error;
@@ -828,7 +854,7 @@ export async function downloadStudentCvForCompany(userId, token) {
       {
         method: "GET",
         headers: {
-          Accept: "application/json",
+          Accept: "application/pdf",
           Authorization: `Bearer ${token}`,
         },
       }
@@ -839,8 +865,7 @@ export async function downloadStudentCvForCompany(userId, token) {
       const errorMessage = errorResponse || "Error desconocido";
       throw new Error(errorMessage);
     }
-    const data = await response.json();
-    return data;
+    return response;
   } catch (error) {
     console.error(error);
     throw error;
