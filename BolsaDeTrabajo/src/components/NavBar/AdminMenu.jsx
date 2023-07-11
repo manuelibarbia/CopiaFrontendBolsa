@@ -8,7 +8,8 @@ import {
   FaSignOutAlt,
   FaTrashAlt,
   FaBuilding,
-  FaFilePdf
+  FaFilePdf,
+  FaUser
 } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { UserContext } from "../../context/UserContext";
@@ -70,19 +71,16 @@ const AdminMenu = () => {
             <FaFilePdf className="mr-2" /> Ver CVs pendientes 
           </Dropdown.Item>
 
+          <Dropdown.Item as={Link} to="/change-password" style={{ margin: "0px" }}>
+            <FaUser className="mr-2" /> Cambiar contraseña
+          </Dropdown.Item>
+
           <Dropdown.Item
             onClick={logoutUserClick}
             type="button"
             style={{ margin: "0px" }}
           >
             <FaSignOutAlt className="mr-2" /> Cerrar sesión
-          </Dropdown.Item>
-          <Dropdown.Item
-            onClick={removeUserClick}
-            type="button"
-            style={{ margin: "0px" }}
-          >
-            <FaTrashAlt className="mr-2" /> Eliminar cuenta
           </Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>
