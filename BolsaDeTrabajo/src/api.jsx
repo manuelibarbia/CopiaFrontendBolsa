@@ -210,37 +210,66 @@ export async function getStudentsWithPendingCV(token) {
   }
 }
 
-// export async function updatePendingCVFile(CVId, token) {
-//   try {
-//     const response = await fetch(
-//       `${DB_DOMAIN}/Admin/updatePendingCVFile/${CVId}`,
-//       {
-//         method: "POST",
-//         headers: {
-//           "Content-Type": "application/json",
-//           Authorization: `Bearer ${token}`,
-//         },
-//       }
-//     );
+export async function acceptPendingCV(studentId, token) {
+  try {
+    const response = await fetch(
+      `${DB_DOMAIN}/Admin/acceptPendingCVFile/${studentId}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
-//     if (!response.ok) {
-//       const errorData = await response.json();
-//       throw new Error(errorData.error);
-//     }
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error);
+    }
 
-//     const responseText = await response.text();
-//     if (responseText.length === 0) {
-//       throw new Error("Error");
-//     }
+    const responseText = await response.text();
+    if (responseText.length === 0) {
+      throw new Error("Error");
+    }
 
-//     return JSON.parse(responseText);
-//   } catch (error) {
-//     console.error(error);
-//     throw error;
-//   }
-// }
+    return JSON.parse(responseText);
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
 
-// cambiar ruta de controler y tipo
+export async function deletePendingCV(studentId, token) {
+  try {
+    const response = await fetch(
+      `${DB_DOMAIN}/Admin/deletePendingCVFile/${studentId}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error);
+    }
+
+    const responseText = await response.text();
+    if (responseText.length === 0) {
+      throw new Error("Error");
+    }
+
+    return JSON.parse(responseText);
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
 export async function getKnowledge(token) {
   try {
     const response = await fetch(
