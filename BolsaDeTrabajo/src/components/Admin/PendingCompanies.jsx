@@ -20,7 +20,7 @@ const PendingCompanies = () => {
         console.error(error);
       })
       .finally(() => {
-        setIsLoading(false)
+        setIsLoading(false);
       });
   }, []);
 
@@ -48,9 +48,11 @@ const PendingCompanies = () => {
         setDeletedMessage(`La empresa ${companyName} ha sido borrada exitosamente.`);
       })
       .catch((error) => {
-        setApiError(error.message);
+        console.error(error);
       });
   };
+
+  const filteredCompanies = pendingCompanies.filter((company) => company.userIsActive);
 
   return (
     <div style={{ marginBlock: "20px" }}>
@@ -59,55 +61,60 @@ const PendingCompanies = () => {
           <Spinner animation="border" role="status" className="spinner" />
         </div>
       ) : (
-      <>
-        {deletedMessage && <Alert variant="danger">{deletedMessage}</Alert>}
-        {successMessage && <Alert variant="success">{successMessage}</Alert>}
-        {pendingCompanies.length > 0 ? (
-          pendingCompanies
-          .filter((company) => company.userIsActive)
-          .map((company, index) => (
-            <Card
-              key={company.companyId}
-              className={index % 2 === 0 ? "even-card" : "odd-card"}
-            >
-              <Card.Body>
-                <Card.Title style={{fontSize: '30px'}}> {company.companyName}</Card.Title>
-                <Card.Subtitle style={{fontSize: '20px', textDecoration: 'underline'}}>Datos de la empresa</Card.Subtitle>
-                <Card.Text>CUIT: {company.companyCUIT}</Card.Text>
-                <Card.Text> Rubro: {company.companyLine}</Card.Text>
-                <Card.Text> Teléfono: {company.companyPhone} </Card.Text>
-                <Card.Text> Ciudad: {company.companyLocation}</Card.Text>
-                <Card.Text>Dirección: {company.companyAddress}</Card.Text>
+        <>
+          {deletedMessage && <Alert variant="danger">{deletedMessage}</Alert>}
+          {successMessage && <Alert variant="success">{successMessage}</Alert>}
+          {filteredCompanies.length > 0 ? (
+            filteredCompanies.map((company, index) => (
+              <Card
+                key={company.companyId}
+                className={index % 2 === 0 ? "even-card" : "odd-card"}
+              >
+                <Card.Body>
+                  <Card.Title style={{ fontSize: "30px" }}>{company.companyName}</Card.Title>
+                  <Card.Subtitle style={{ fontSize: "20px", textDecoration: "underline" }}>
+                    Datos de la empresa
+                  </Card.Subtitle>
+                  <Card.Text>CUIT: {company.companyCUIT}</Card.Text>
+                  <Card.Text> Rubro: {company.companyLine}</Card.Text>
+                  <Card.Text> Teléfono: {company.companyPhone} </Card.Text>
+                  <Card.Text> Ciudad: {company.companyLocation}</Card.Text>
+                  <Card.Text>Dirección: {company.companyAddress}</Card.Text>
 
-                <Card.Subtitle style={{fontSize: '20px', textDecoration: 'underline'}}>Datos de contacto</Card.Subtitle>
-                <Card.Text>Nombre personal: {company.companyPersonalName}</Card.Text>
-                <Card.Text>Apellido: {company.companyPersonalSurname}</Card.Text>
-                <Card.Text>Cargo: {company.companyPersonalJob}</Card.Text>
-                <Card.Text>Teléfono personal: {company.companyPersonalPhone}</Card.Text>
-                <Button
-                  style={{marginRight: '10px'}}
-                  onClick={() =>
-                    handleUpdatePendingCompany(company.userId, company.companyName)
-                  }
-                  variant="success"
-                >
-                  Habilitar empresa
-                </Button>
-                <Button
-                  onClick={() =>
-                    handleDeletePendingCompany(company.userId, company.companyName)
-                  }
-                  variant="danger"
-                >
-                  Borrar empresa
-                </Button>
-              </Card.Body>
-            </Card>
-          ))
-        ) : (
-          <h2 style={{textAlign:"center"}}>Por el momento, no hay empresas pendientes de confirmar.</h2>
-        )}
-      </>)}
+                  <Card.Subtitle style={{ fontSize: "20px", textDecoration: "underline" }}>
+                    Datos de contacto
+                  </Card.Subtitle>
+                  <Card.Text>Nombre personal: {company.companyPersonalName}</Card.Text>
+                  <Card.Text>Apellido: {company.companyPersonalSurname}</Card.Text>
+                  <Card.Text>Cargo: {company.companyPersonalJob}</Card.Text>
+                  <Card.Text>Teléfono personal: {company.companyPersonalPhone}</Card.Text>
+                  <Button
+                    style={{ marginRight: "10px" }}
+                    onClick={() =>
+                      handleUpdatePendingCompany(company.userId, company.companyName)
+                    }
+                    variant="success"
+                  >
+                    Habilitar empresa
+                  </Button>
+                  <Button
+                    onClick={() =>
+                      handleDeletePendingCompany(company.userId, company.companyName)
+                    }
+                    variant="danger"
+                  >
+                    Borrar empresa
+                  </Button>
+                </Card.Body>
+              </Card>
+            ))
+          ) : (
+            <h2 style={{ textAlign: "center" }}>
+              Por el momento, no hay empresas pendientes de confirmar.
+            </h2>
+          )}
+        </>
+      )}
     </div>
   );
 };
