@@ -63,7 +63,9 @@ const PendingCompanies = () => {
         {deletedMessage && <Alert variant="danger">{deletedMessage}</Alert>}
         {successMessage && <Alert variant="success">{successMessage}</Alert>}
         {pendingCompanies.length > 0 ? (
-          pendingCompanies.map((company, index) => (
+          pendingCompanies
+          .filter((company) => company.userIsActive)
+          .map((company, index) => (
             <Card
               key={company.companyId}
               className={index % 2 === 0 ? "even-card" : "odd-card"}
