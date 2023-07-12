@@ -10,6 +10,7 @@ import {
   FaBriefcase,
   FaFilePdf,
   FaCode,
+  FaCog,
 } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { UserContext } from "../../context/UserContext";
@@ -93,12 +94,21 @@ const StudentMenu = () => {
           </Dropdown.Item>
 
           <Dropdown.Item
+            as={Link}
+            to="/change-password"
+            style={{ margin: "0px" }}
+          >
+            <FaCog className="mr-2" /> Cambiar contraseña
+          </Dropdown.Item>
+
+          <Dropdown.Item
             onClick={logoutUserClick}
             type="button"
             style={{ margin: "0px" }}
           >
             <FaSignOutAlt className="mr-2" /> Cerrar sesión
           </Dropdown.Item>
+
           <Dropdown.Item
             type="button"
             style={{ margin: "0px" }}

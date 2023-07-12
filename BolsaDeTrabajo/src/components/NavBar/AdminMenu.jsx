@@ -9,7 +9,7 @@ import {
   FaTrashAlt,
   FaBuilding,
   FaFilePdf,
-  FaUser
+  FaUser,
 } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { UserContext } from "../../context/UserContext";
@@ -67,12 +67,20 @@ const AdminMenu = () => {
             <FaBuilding className="mr-2" /> Ver empresas pendientes
           </Dropdown.Item>
 
-          <Dropdown.Item as={Link} to="/students-with-pending-cv" style={{ margin: "0px" }}>
-            <FaFilePdf className="mr-2" /> Ver CVs pendientes 
+          <Dropdown.Item
+            as={Link}
+            to="/students-with-pending-cv"
+            style={{ margin: "0px" }}
+          >
+            <FaFilePdf className="mr-2" /> Ver CVs pendientes
           </Dropdown.Item>
 
-          <Dropdown.Item as={Link} to="/change-password" style={{ margin: "0px" }}>
-            <FaUser className="mr-2" /> Cambiar contraseña
+          <Dropdown.Item
+            as={Link}
+            to="/change-password"
+            style={{ margin: "0px" }}
+          >
+            <FaCog className="mr-2" /> Cambiar contraseña
           </Dropdown.Item>
 
           <Dropdown.Item
