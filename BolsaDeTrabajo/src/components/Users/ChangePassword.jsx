@@ -38,13 +38,15 @@ const ChangePassword = () => {
   };
 
   useEffect(() => {
-    setSuccess("");
     setApiError("");
     setFrontError("");
   }, [currentPassword, newPassword, confirmNewPassword]);
 
   const handleClickChangePassword = async (event) => {
     event.preventDefault();
+    setSuccess("");
+    setApiError("");
+    setFrontError("");
     if (!currentPassword || !newPassword || !confirmNewPassword) {
       setSuccess("");
       setFrontError("Por favor, complete todos los campos.");
@@ -130,7 +132,7 @@ const ChangePassword = () => {
         </Form.Group>
 
         <Button variant="primary" type="submit" className="mt-3">
-          Cambiar contraseña
+          Cambiar
         </Button>
 
         {frontError && (
