@@ -1,6 +1,16 @@
 import { useEffect, useState } from "react";
-import { Form, Button, Alert, Row, Col } from "react-bootstrap";
+import {
+  Form,
+  Button,
+  Alert,
+  Row,
+  Col,
+  InputGroup,
+  FormControl,
+} from "react-bootstrap";
 import { createCompany } from "../../api";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 
 const CompanyInfoForm = () => {
   const [userName, setUserName] = useState("");
@@ -25,34 +35,46 @@ const CompanyInfoForm = () => {
   const [apiError, setApiError] = useState("");
   const [apiSuccess, setApiSuccess] = useState("");
 
+  const [showPassword, setShowPassword] = useState(false);
+  const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
+
+  const handleShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const handleShowPasswordConfirm = () => {
+    setShowPasswordConfirm(!showPasswordConfirm);
+  };
+
   const validateNameOrSurname = (nameOrSurname) => {
     const nameOrSurnameRegex = /^[a-zA-Z\u00C0-\u017F\s]+$/;
     return nameOrSurnameRegex.test(nameOrSurname);
   };
 
   const validatePassword = (password) => {
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-    return passwordRegex.test(password)
-  }
+    const passwordRegex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    return passwordRegex.test(password);
+  };
 
   const validateConfirmPassword = (password, confirmPassword) => {
     return password === confirmPassword;
-  }
+  };
 
   const validateCUIT = (CUIT) => {
     const CUITRegex = /^\d{11}$/;
     return CUITRegex.test(CUIT);
-  }
+  };
 
   const validatePhoneNumber = (phoneNumber) => {
     const phoneNumberRegex = /^\d{10}$/;
     return phoneNumberRegex.test(phoneNumber);
-  }
+  };
 
   const validateBothPhones = (companyPhoneNumber, personalPhoneNumber) => {
     return companyPhoneNumber !== personalPhoneNumber;
-  }
-  
+  };
+
   const validateEmail = (companyPersonalEmail) => {
     const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
     const instEmailRegex = /^[A-Za-z0-9._%+-]+@frro\.utn\.edu\.ar$/;
@@ -65,7 +87,25 @@ const CompanyInfoForm = () => {
   useEffect(() => {
     setFrontError("");
     setApiError("");
-  }, [userName, password, confirmPassword, companyCUIT, companyLine, companyName, companyAddress, companyLocation, companyPostalCode, companyPhone, companyWebPage, companyPersonalName, companyPersonalSurname, companyPersonalJob, companyPersonalPhone, companyPersonalEmail, companyRelationContact])
+  }, [
+    userName,
+    password,
+    confirmPassword,
+    companyCUIT,
+    companyLine,
+    companyName,
+    companyAddress,
+    companyLocation,
+    companyPostalCode,
+    companyPhone,
+    companyWebPage,
+    companyPersonalName,
+    companyPersonalSurname,
+    companyPersonalJob,
+    companyPersonalPhone,
+    companyPersonalEmail,
+    companyRelationContact,
+  ]);
 
   const handleCreateCompany = async (event) => {
     event.preventDefault();
@@ -73,18 +113,41 @@ const CompanyInfoForm = () => {
     setFrontError("");
     setApiError("");
 
-    if (!userName || !password || !confirmPassword || !companyCUIT || !companyLine || !companyName || !companyAddress || !companyLocation || !companyPostalCode || !companyPhone || !companyWebPage || !companyPersonalName || !companyPersonalSurname || !companyPersonalJob || !companyPersonalPhone || !companyPersonalEmail || !companyRelationContact) {
+    if (
+      !userName ||
+      !password ||
+      !confirmPassword ||
+      !companyCUIT ||
+      !companyLine ||
+      !companyName ||
+      !companyAddress ||
+      !companyLocation ||
+      !companyPostalCode ||
+      !companyPhone ||
+      !companyWebPage ||
+      !companyPersonalName ||
+      !companyPersonalSurname ||
+      !companyPersonalJob ||
+      !companyPersonalPhone ||
+      !companyPersonalEmail ||
+      !companyRelationContact
+    ) {
       setFrontError("Todos los campos deben estar completos");
       return;
     }
 
     const passwordIsValid = validatePassword(password);
     if (!passwordIsValid) {
-      setFrontError("Contraseña insegura, debe contener al menos una letra mayúscula, una minúscula, un número y un caracter especial. 8 en total")
+      setFrontError(
+        "Contraseña insegura, debe contener al menos una letra mayúscula, una minúscula, un número y un caracter especial. 8 en total"
+      );
       return;
     }
 
-    const confirmPasswordIsValid = validateConfirmPassword(password, confirmPassword);
+    const confirmPasswordIsValid = validateConfirmPassword(
+      password,
+      confirmPassword
+    );
     if (!confirmPasswordIsValid) {
       setFrontError("Los campos introducidos de contraseña no coinciden");
       return;
@@ -98,7 +161,9 @@ const CompanyInfoForm = () => {
 
     const isPhoneNumber = validatePhoneNumber(companyPhone);
     if (!isPhoneNumber) {
-      setFrontError("Teléfono de la empresa no válido, debe contener 10 dígitos");
+      setFrontError(
+        "Teléfono de la empresa no válido, debe contener 10 dígitos"
+      );
       return;
     }
 
@@ -108,7 +173,10 @@ const CompanyInfoForm = () => {
       return;
     }
 
-    const phoneNumbersAreDifferent = validateBothPhones(companyPhone, companyPersonalPhone);
+    const phoneNumbersAreDifferent = validateBothPhones(
+      companyPhone,
+      companyPersonalPhone
+    );
     if (!phoneNumbersAreDifferent) {
       setFrontError("Los números de teléfono deben ser diferentes");
       return;
@@ -164,10 +232,9 @@ const CompanyInfoForm = () => {
       setApiError(error.message);
       setApiSuccess("");
     }
-    
   };
 
-   return (
+  return (
     <Form onSubmit={handleCreateCompany}>
       <Row>
         <Col>
@@ -184,23 +251,38 @@ const CompanyInfoForm = () => {
         <Col>
           <Form.Group controlId="company-password">
             <Form.Label>Contraseña</Form.Label>
-            <Form.Control
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Ingresa la contraseña"
-            />
+            <InputGroup>
+              <FormControl
+                type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Ingresa la contraseña"
+              />
+              <Button variant="outline-secondary" onClick={handleShowPassword}>
+                <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
+              </Button>
+            </InputGroup>
           </Form.Group>
         </Col>
         <Col>
           <Form.Group controlId="company-confirm-password">
             <Form.Label>Confirmar contraseña</Form.Label>
-            <Form.Control
-              type="password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              placeholder="Ingresa nuevamente la contraseña"
-            />
+            <InputGroup>
+              <Form.Control
+                type={showPasswordConfirm ? "text" : "password"}
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                placeholder="Ingresa nuevamente la contraseña"
+              />
+              <Button
+                variant="outline-secondary"
+                onClick={handleShowPasswordConfirm}
+              >
+                <FontAwesomeIcon
+                  icon={showPasswordConfirm ? faEyeSlash : faEye}
+                />
+              </Button>
+            </InputGroup>
           </Form.Group>
         </Col>
       </Row>

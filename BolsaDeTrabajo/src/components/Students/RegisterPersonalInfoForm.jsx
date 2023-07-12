@@ -11,10 +11,14 @@ import {
   FormCheck,
   FormSelect,
   Alert,
+  InputGroup,
 } from "react-bootstrap";
 import { differenceInYears } from "date-fns";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 
 import { createStudent } from "../../api";
 import { useNavigate } from "react-router-dom";
@@ -41,6 +45,16 @@ export default function PersonalInfoForm() {
   const [apiError, setApiError] = useState("");
   const [apiSuccess, setApiSuccess] = useState("");
   const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
+  const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
+
+  const handleShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const handleShowPasswordConfirm = () => {
+    setShowPasswordConfirm(!showPasswordConfirm);
+  };
 
   const validatePassword = (password) => {
     const passwordRegex =
@@ -228,25 +242,40 @@ export default function PersonalInfoForm() {
           </FormGroup>
         </Col>
         <Col>
-          <FormGroup controlId="password">
-            <FormLabel>Contraseña</FormLabel>
-            <FormControl
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Ingresa tu contraseña"
-            />
-          </FormGroup>
+          <Form.Group controlId="password">
+            <Form.Label>Contraseña</Form.Label>
+            <InputGroup>
+              <FormControl
+                type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Ingresa tu contraseña"
+              />
+              <Button variant="outline-secondary" onClick={handleShowPassword}>
+                <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
+              </Button>
+            </InputGroup>
+          </Form.Group>
         </Col>
         <Col>
           <FormGroup controlId="confirmPassword">
             <FormLabel>Confirmar contraseña</FormLabel>
-            <FormControl
-              type="password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              placeholder="Ingresa nuevamente tu contraseña"
-            />
+            <InputGroup>
+              <FormControl
+                type={showPasswordConfirm ? "text" : "password"}
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                placeholder="Ingresa nuevamente tu contraseña"
+              />
+              <Button
+                variant="outline-secondary"
+                onClick={handleShowPasswordConfirm}
+              >
+                <FontAwesomeIcon
+                  icon={showPasswordConfirm ? faEyeSlash : faEye}
+                />
+              </Button>
+            </InputGroup>
           </FormGroup>
         </Col>
         <Col>
