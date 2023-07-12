@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { Alert, Card } from "react-bootstrap";
+import { Alert, Card, Spinner } from "react-bootstrap";
 import { UserContext } from "../../context/UserContext";
 import { getStudentKnowledgeAsCompany } from "../../api";
 
@@ -9,6 +9,7 @@ const StudentInOfferKnowledge = () => {
     const [studentKnowledgeList, setStudentKnowledgeList] = useState([]);
     const [apiError, setApiError] = useState("");
     const [apiSuccess, setApiSuccess] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
     const { name, surname, userId } = useParams();
 
     useEffect(() => {
@@ -22,12 +23,21 @@ const StudentInOfferKnowledge = () => {
         .catch((error) => {
             setApiSuccess(false);
             setApiError(error.message);
+        })
+        .finally(() => {
+            setIsLoading(false);
         });
     }, [userId, user.token]);
 
     return (
     <div style={{ marginBlock: "20px" }}>
-        {apiSuccess && studentKnowledgeList.length > 0 ? 
+        {isLoading ? (
+            <div className="spinner-container">
+                <Spinner className="spinner"/>
+            </div>
+        ) : (
+            <>
+                {apiSuccess && studentKnowledgeList.length > 0 ? 
         (<>
         <h1>Conocimientos del estudiante: {name} {surname}</h1>
         {studentKnowledgeList.map((knowledge, index) => (
@@ -48,6 +58,8 @@ const StudentInOfferKnowledge = () => {
         </>)
         :
         (<h1>El estudiante {name} {surname} no posee conocimientos</h1>)}
+            </>
+        )}
     </div>
     );
 }
